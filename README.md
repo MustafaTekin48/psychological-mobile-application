@@ -1,16 +1,18 @@
-# flutter_application_1_notification
+# Psychological Mobile Application - Emotion Analysis App
 
-A new Flutter project.
+This is a mobile application developed using **Flutter** and **Dart**, designed to help users better understand their emotional states through analysis and guidance. It leverages natural language input and user interactions to perform basic **emotion detection** and offer feedback that can support emotional awareness and mental well-being.
 
-## Getting Started
+## 🧠 Features
 
-This project is a starting point for a Flutter application.
+- 📝 **Emotion Analysis** from user input (text-based)
+- 📈 **Mood Tracking** over time
+- 📊 **Visualization** of emotional trends
+- 💡 **Suggestions & Insights** based on emotional patterns
+- 🌐 Multi-platform support (Android, iOS-ready)
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## 🚀 Technologies Used
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Flutter** – for cross-platform UI development
+- **Dart** – as the main programming language
+- **Android Studio** – for development and testing
