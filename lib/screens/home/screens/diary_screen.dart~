@@ -1,0 +1,100 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/diary/screens/emotion_selection_screen.dart';
+import '../../diary/database/diary_database_helper.dart';
+import '../../diary/screens/calendar_screen.dart';
+import '../../diary/screens/home_screen.dart';
+
+class DiaryScreen extends StatefulWidget {
+  @override
+  _DiaryScreenState createState() => _DiaryScreenState();
+}
+
+class _DiaryScreenState extends State<DiaryScreen> {
+  int _selectedIndex = 0;
+  List<Map<String, dynamic>> _diaryEntries = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadEntries(); // 📌 Uygulama açıldığında verileri yükle
+  }
+
+  Future<void> _loadEntries() async {
+    final entries = await DiaryDatabase.instance.getEntries();
+    setState(() {
+      _diaryEntries = entries;
+    });
+  }
+
+  Future<void> _addEntry(Map<String, dynamic> newEntry) async {
+    await DiaryDatabase.instance.addEntry(newEntry);
+    _loadEntries(); // 📌 Yeni giriş eklendiğinde güncelle
+  }
+
+  Future<void> _updateEntry(int id, Map<String, dynamic> updatedEntry) async {
+    await DiaryDatabase.instance.updateEntry(id, updatedEntry);
+    _loadEntries(); // 📌 Güncellendiğinde yenile
+  }
+
+  Future<void> _deleteEntry(int id) async {
+    await DiaryDatabase.instance.deleteEntry(id);
+    _loadEntries(); // 📌 Silindiğinde yenile
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Günlüklerim', style: TextStyle(color: Colors.black87)),
+        backgroundColor: Color(0xFF3F3D56),
+      ),
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          HomeScreen(
+            diaryEntries: _diaryEntries,
+            onRefresh: _loadEntries, // 📌 Ana sayfa güncellendiğinde takvimi de güncelle
+          ),
+          CalendarScreen(
+            onEntriesUpdated: _loadEntries, // 📌 Takvimde de anında güncelle
+          ),
+          EmotionSelectionScreen(
+            onNewEntry: (newEntry) {
+              _addEntry(newEntry);
+              setState(() {
+                _selectedIndex = 0; // 📌 Ana ekrana geri dön
+              });
+            },
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Ana Sayfa',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.calendar_today),
+            label: 'Takvim',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Günlük',
+          ),
+        ],
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.black87,
+        backgroundColor: Color(0xFF3F3D56),
+      ),
+    );
+  }
+}
